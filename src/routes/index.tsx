@@ -1,29 +1,66 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Nav } from "@/components/portfolio/Nav";
+import { Hero } from "@/components/portfolio/Hero";
+import { About } from "@/components/portfolio/About";
+import { Stats } from "@/components/portfolio/Stats";
+import { Leadership } from "@/components/portfolio/Leadership";
+import { Education } from "@/components/portfolio/Education";
+import { Experience } from "@/components/portfolio/Experience";
+import { Skills } from "@/components/portfolio/Skills";
+import { Projects } from "@/components/portfolio/Projects";
+import { Achievements } from "@/components/portfolio/Achievements";
+import { Gallery } from "@/components/portfolio/Gallery";
+import { Testimonials } from "@/components/portfolio/Testimonials";
+import { Contact } from "@/components/portfolio/Contact";
+import { Footer } from "@/components/portfolio/Footer";
+import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
+
+const DESC = "Ibrahim Khalil — President, Trishal 10 No. Mathbari Union. Student, professional, community leader and public representative serving Mymensingh, Bangladesh.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Ibrahim Khalil — President, Mathbari Union | Leader & Public Representative" },
+      { name: "description", content: DESC },
+      { property: "og:title", content: "Ibrahim Khalil — President, Mathbari Union" },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "profile" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Ibrahim Khalil",
+        jobTitle: "President, Trishal 10 No. Mathbari Union",
+        address: { "@type": "PostalAddress", addressLocality: "Trishal", addressRegion: "Mymensingh", addressCountry: "Bangladesh" },
+      }),
+    }],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="relative min-h-dvh overflow-x-clip">
+      <ScrollProgress />
+      <Nav />
+      <Hero />
+      <About />
+      <Stats />
+      <Leadership />
+      <Education />
+      <Experience />
+      <Skills />
+      <Projects />
+      <Achievements />
+      <Gallery />
+      <Testimonials />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
