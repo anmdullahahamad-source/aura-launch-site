@@ -1,17 +1,17 @@
-import { motion } from "framer-motion";
 import { Section, SectionHeader } from "./Section";
-import { Sparkles, Building2, Sprout, GraduationCap, HandHeart, Eye } from "lucide-react";
+import { SmoothReveal } from "../SmoothReveal";
+import { Sparkles, Building2, MapPin, Clock, Quote } from "lucide-react";
+import { InteractiveCard } from "../InteractiveCard";
+import { Timeline, TimelineItem } from "../ui/Timeline";
+import { LeadershipInteraction } from "../LeadershipInteraction";
+import { useTranslation } from "../../lib/i18n";
 
-const initiatives = [
-  { Icon: Building2, title: "Digital Union Office", text: "Modernising public service delivery with online certificates, requests and grievance tracking." },
-  { Icon: Sprout, title: "Green Mathbari", text: "Tree-planting, clean water and renewable-energy projects across every ward of the union." },
-  { Icon: GraduationCap, title: "Scholar Bridge", text: "Merit and need-based scholarships for college students from underprivileged families." },
-  { Icon: HandHeart, title: "Family Welfare", text: "Maternal-health camps, elderly care drives and rapid-response winter relief." },
-  { Icon: Sparkles, title: "Youth Leadership Lab", text: "Mentorship, public-speaking and entrepreneurship training for the next generation." },
-  { Icon: Eye, title: "Transparency First", text: "Quarterly public budget hearings and an open dashboard for every ongoing project." },
-];
+const roleIcons = [Sparkles, Building2];
 
 export function Leadership() {
+  const { t, tObject } = useTranslation();
+  const roles = tObject<{ title: string; org: string; unit: string; period: string; description: string }[]>("leadership.roles");
+
   return (
     <Section id="leadership" className="overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -20,48 +20,54 @@ export function Leadership() {
       </div>
 
       <SectionHeader
-        eyebrow="Leadership & Politics"
-        title={<>Public service, <span className="text-gradient-gold">reimagined</span></>}
-        description="As President of Trishal 10 No. Mathbari Union, my work is anchored in six commitments."
+        eyebrow={t("leadership.eyebrow")}
+        title={
+          <>
+            {t("leadership.title1")} <span className="text-gradient-gold">{t("leadership.title2")}</span>
+          </>
+        }
+        description={t("leadership.description")}
       />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {initiatives.map((it, i) => (
-          <motion.div
-            key={it.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: i * 0.07 }}
-            whileHover={{ y: -6 }}
-            className="group relative rounded-3xl glass p-6 overflow-hidden"
-          >
-            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="grid h-12 w-12 place-items-center rounded-2xl glass-gold mb-5 group-hover:glow-gold transition-all">
-              <it.Icon className="h-5 w-5 text-gold" />
-            </div>
-            <h3 className="font-display text-xl font-semibold">{it.title}</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{it.text}</p>
-          </motion.div>
-        ))}
+      <div className="relative">
+        <div className="flex justify-center mb-10">
+          <LeadershipInteraction />
+        </div>
+
+        <Timeline className="max-w-3xl">
+          {roles.map((r, i) => (
+            <TimelineItem
+              key={r.title}
+              icon={<Clock className="h-3.5 w-3.5" />}
+              date={r.period}
+              title={r.title}
+              org={r.org}
+              description={r.unit}
+              index={i}
+              side="left"
+            >
+              <p className="text-sm text-muted-foreground/80 mt-2 leading-relaxed">
+                {r.description}
+              </p>
+            </TimelineItem>
+          ))}
+        </Timeline>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
+      <SmoothReveal
+        direction="up"
+        delay={0.25}
         className="mt-14 relative rounded-3xl glass-gold p-8 sm:p-12 text-center max-w-3xl mx-auto"
       >
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-gold/10 to-transparent" />
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-gold/10 to-transparent pointer-events-none" />
         <div className="relative">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Future Vision</div>
-          <p className="font-display text-2xl sm:text-3xl leading-snug">
-            "A Mathbari where every child learns, every family thrives, and every voice is heard — built openly,
-            powered by people, and ready for the world we are becoming."
+          <Quote className="mx-auto h-8 w-8 text-gold/30 mb-4" />
+          <div className="text-[10px] uppercase tracking-[0.3em] text-gold mb-4">{t("leadership.futureVision")}</div>
+          <p className="font-display text-xl sm:text-2xl leading-relaxed text-foreground/90">
+            &ldquo;{t("leadership.quote")}&rdquo;
           </p>
         </div>
-      </motion.div>
+      </SmoothReveal>
     </Section>
   );
 }

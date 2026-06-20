@@ -1,41 +1,62 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Section, SectionHeader } from "./Section";
+import img0 from "@/assets/img-0.jpg";
+import img1 from "@/assets/img-1.jpg";
+import img2 from "@/assets/img-2.jpg";
+import img3 from "@/assets/img-3.jpg";
+import img4 from "@/assets/img-4.png";
+import { GalleryInteraction } from "../GalleryInteraction";
+import { useTranslation } from "../../lib/i18n";
 
-const tiles = [
-  { label: "Community Meeting", h: "h-72", g: "from-emerald-deep/50 to-emerald-glow/30" },
-  { label: "Youth Summit 2024", h: "h-56", g: "from-gold/30 to-emerald-glow/20" },
-  { label: "Education Drive", h: "h-64", g: "from-emerald-glow/30 to-gold/20" },
-  { label: "Tree Plantation", h: "h-80", g: "from-emerald-deep/60 to-emerald-glow/20" },
-  { label: "Public Address", h: "h-56", g: "from-gold/25 to-emerald-deep/40" },
-  { label: "Health Camp", h: "h-72", g: "from-emerald-glow/25 to-gold/15" },
-  { label: "Cultural Festival", h: "h-64", g: "from-gold/35 to-emerald-glow/25" },
-  { label: "Relief Distribution", h: "h-60", g: "from-emerald-deep/40 to-gold/20" },
-];
+const imageSources = [img0, img1, img2, img3, img4];
+const imageHeights = ["h-56 sm:h-72", "h-44 sm:h-56", "h-48 sm:h-64", "h-60 sm:h-80", "h-44 sm:h-56"];
 
 export function Gallery() {
+  const prefersReduced = useReducedMotion();
+  const [zoomKey, setZoomKey] = useState(0);
+  const { t, tArray } = useTranslation();
+  const captions = tArray("gallery.captions");
+
   return (
     <Section id="gallery">
       <SectionHeader
-        eyebrow="Gallery"
-        title={<>Moments from <span className="text-gradient-gold">the field</span></>}
-        description="Snapshots from community programs, public events and grassroots leadership."
+        eyebrow={t("gallery.eyebrow")}
+        title={
+          <>
+            {t("gallery.title1")} <span className="text-gradient-gold">{t("gallery.title2")}</span>
+          </>
+        }
+        description={t("gallery.description")}
       />
 
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 [&>*]:mb-4">
-        {tiles.map((t, i) => (
+      <div className="flex justify-center mb-8">
+        <GalleryInteraction onActivate={() => setZoomKey((p) => p + 1)} />
+      </div>
+
+      <div key={zoomKey} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {captions.map((label, i) => (
           <motion.figure
-            key={i}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            key={`${label}-${i}`}
+            initial={prefersReduced ? {} : { opacity: 0, scale: zoomKey > 0 ? 1.08 : 0.95 }}
+            whileInView={prefersReduced ? {} : { opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: (i % 4) * 0.08 }}
-            className={`relative break-inside-avoid rounded-2xl overflow-hidden glass group cursor-pointer`}
+            transition={{ duration: 0.7, delay: (i % 4) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="relative rounded-2xl overflow-hidden glass group cursor-pointer"
           >
-            <div className={`${t.h} bg-gradient-to-br ${t.g} relative`}>
+            <div className={`${imageHeights[i]} relative`}>
+              <img
+                src={imageSources[i]}
+                alt={label}
+                width="400"
+                height="300"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 grid-bg opacity-40" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <figcaption className="absolute bottom-3 left-3 right-3 text-xs text-foreground/90 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all">
-                {t.label}
+                {label}
               </figcaption>
             </div>
           </motion.figure>

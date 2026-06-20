@@ -1,45 +1,61 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { Section, SectionHeader } from "./Section";
-import { Trophy, Award, Medal, Star } from "lucide-react";
+import { Trophy, Award, Star } from "lucide-react";
+import { InteractiveCard } from "../InteractiveCard";
+import { AchievementsInteraction } from "../AchievementsInteraction";
+import { useTranslation } from "../../lib/i18n";
 
-const items = [
-  { Icon: Trophy, year: "2024", title: "Outstanding Young Leader Award", org: "Mymensingh Division Council" },
-  { Icon: Award, year: "2023", title: "Community Service Recognition", org: "Bangladesh Youth Council" },
-  { Icon: Medal, year: "2022", title: "Best Union Digital Transformation", org: "LGED National Awards" },
-  { Icon: Star, year: "2021", title: "Excellence in Public Engagement", org: "Civil Society Forum" },
-  { Icon: Award, year: "2020", title: "Volunteer of the Year", org: "Red Crescent Bangladesh" },
-  { Icon: Trophy, year: "2019", title: "National Debate Champion", org: "Inter-University Tournament" },
-];
+const icons = [Trophy, Award, Star];
 
 export function Achievements() {
+  const [revealKey, setRevealKey] = useState(0);
+  const { t, tObject } = useTranslation();
+
+  const items = [
+    tObject<{ year: string; title: string; org: string }>("achievements.item1"),
+    tObject<{ year: string; title: string; org: string }>("achievements.item2"),
+    tObject<{ year: string; title: string; org: string }>("achievements.item3"),
+  ];
+
   return (
     <Section id="achievements">
       <SectionHeader
-        eyebrow="Achievements"
-        title={<>Honours <span className="text-gradient-gold">& recognition</span></>}
+        eyebrow={t("achievements.eyebrow")}
+        title={
+          <>
+            {t("achievements.title")}
+          </>
+        }
       />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {items.map((it, i) => (
-          <motion.div
-            key={it.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.06 }}
-            whileHover={{ y: -4 }}
-            className="flex gap-4 p-5 rounded-2xl glass"
-          >
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl glass-gold">
-              <it.Icon className="h-5 w-5 text-gold" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-[10px] uppercase tracking-widest text-gold">{it.year}</div>
-              <div className="font-display text-base font-semibold mt-0.5">{it.title}</div>
-              <div className="text-xs text-muted-foreground mt-1">{it.org}</div>
-            </div>
-          </motion.div>
-        ))}
+      <div className="flex justify-center mb-8">
+        <AchievementsInteraction onActivate={() => setRevealKey((p) => p + 1)} />
+      </div>
+
+      <div key={revealKey} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {items.map((it, i) => {
+          const Icon = icons[i];
+          return (
+            <InteractiveCard
+              key={it.title}
+              tiltFactor={5}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+              className="flex gap-4 p-5 rounded-2xl glass"
+            >
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl glass-gold">
+                <Icon className="h-5 w-5 text-gold" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase tracking-widest text-gold">{it.year}</div>
+                <div className="font-display text-base font-semibold mt-0.5">{it.title}</div>
+                <div className="text-xs text-muted-foreground mt-1">{it.org}</div>
+              </div>
+            </InteractiveCard>
+          );
+        })}
       </div>
     </Section>
   );

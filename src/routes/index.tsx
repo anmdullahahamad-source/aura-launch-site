@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/portfolio/Nav";
 import { Hero } from "@/components/portfolio/Hero";
@@ -7,45 +8,63 @@ import { Leadership } from "@/components/portfolio/Leadership";
 import { Education } from "@/components/portfolio/Education";
 import { Experience } from "@/components/portfolio/Experience";
 import { Skills } from "@/components/portfolio/Skills";
-import { Projects } from "@/components/portfolio/Projects";
 import { Achievements } from "@/components/portfolio/Achievements";
-import { Gallery } from "@/components/portfolio/Gallery";
-import { Testimonials } from "@/components/portfolio/Testimonials";
 import { Contact } from "@/components/portfolio/Contact";
 import { Footer } from "@/components/portfolio/Footer";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 
-const DESC = "Ibrahim Khalil — President, Trishal 10 No. Mathbari Union. Student, professional, community leader and public representative serving Mymensingh, Bangladesh.";
+const Projects = lazy(() =>
+  import("@/components/portfolio/Projects").then((m) => ({ default: m.Projects })),
+);
+const Gallery = lazy(() =>
+  import("@/components/portfolio/Gallery").then((m) => ({ default: m.Gallery })),
+);
+const Testimonials = lazy(() =>
+  import("@/components/portfolio/Testimonials").then((m) => ({ default: m.Testimonials })),
+);
+
+const DESC =
+  "Ibrahim Khalil — Student, Marketing Officer & Youth Leader from Trishal, Mymensingh. Currently pursuing Honours in Philosophy and Fazil in Bengali, serving as President of Bangladesh Jamaat-e-Islami Youth Wing.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ibrahim Khalil — President, Mathbari Union | Leader & Public Representative" },
+      { title: "Ibrahim Khalil — Student, Marketing Officer & Youth Leader" },
       { name: "description", content: DESC },
-      { property: "og:title", content: "Ibrahim Khalil — President, Mathbari Union" },
+      {
+        property: "og:title",
+        content: "Ibrahim Khalil — Student, Marketing Officer & Youth Leader",
+      },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "profile" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
-    scripts: [{
-      type: "application/ld+json",
-      children: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: "Ibrahim Khalil",
-        jobTitle: "President, Trishal 10 No. Mathbari Union",
-        address: { "@type": "PostalAddress", addressLocality: "Trishal", addressRegion: "Mymensingh", addressCountry: "Bangladesh" },
-      }),
-    }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Ibrahim Khalil",
+          jobTitle: "President, Bangladesh Jamaat-e-Islami, 10 No. Mathbari Union Youth Wing",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Trishal",
+            addressRegion: "Mymensingh",
+            addressCountry: "Bangladesh",
+          },
+        }),
+      },
+    ],
   }),
   component: Index,
 });
 
 function Index() {
   return (
-    <main className="relative min-h-dvh overflow-x-clip">
+    <main id="main-content" className="relative min-h-dvh overflow-x-clip">
       <ScrollProgress />
       <Nav />
       <Hero />
@@ -55,10 +74,10 @@ function Index() {
       <Education />
       <Experience />
       <Skills />
-      <Projects />
       <Achievements />
-      <Gallery />
-      <Testimonials />
+      <Suspense fallback={null}><Projects /></Suspense>
+      <Suspense fallback={null}><Gallery /></Suspense>
+      <Suspense fallback={null}><Testimonials /></Suspense>
       <Contact />
       <Footer />
     </main>
