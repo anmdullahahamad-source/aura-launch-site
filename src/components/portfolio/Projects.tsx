@@ -39,7 +39,7 @@ interface ProjectData {
   details: string[];
 }
 
-export function Projects() {
+export default function Projects() {
   const prefersReduced = useReducedMotion();
   const isMobile = useIsMobile();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -113,7 +113,6 @@ export function Projects() {
 
       <div className="grid md:grid-cols-2 gap-6">
         {projects.map((p, i) => {
-          const Icon = projectMeta[i].icon;
           return (
             <InteractiveCard
               key={i}
@@ -193,7 +192,7 @@ export function Projects() {
                     className="grid h-10 w-10 place-items-center rounded-xl"
                     style={{ background: "var(--glass-gold-bg)", border: "var(--glass-gold-border)" }}
                   >
-                    <selectedMeta.icon className="h-5 w-5 text-gold" />
+                    {selectedMeta.icon ? <selectedMeta.icon className="h-5 w-5 text-gold" /> : null}
                   </div>
                   <div>
                     <h2

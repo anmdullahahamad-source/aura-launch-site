@@ -15,7 +15,7 @@ import { useTranslation } from "../../lib/i18n";
 
 const imageSources = [img0, img1, img2, img3, img4, img5, img6, img7, img8];
 
-export function Gallery() {
+export default function Gallery() {
   const prefersReduced = useReducedMotion();
   const [zoomKey, setZoomKey] = useState(0);
   const { t, tArray } = useTranslation();

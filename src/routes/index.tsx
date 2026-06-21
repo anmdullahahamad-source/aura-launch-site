@@ -13,15 +13,9 @@ import { Contact } from "@/components/portfolio/Contact";
 import { Footer } from "@/components/portfolio/Footer";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 
-const Projects = lazy(() =>
-  import("@/components/portfolio/Projects").then((m) => ({ default: m.Projects })),
-);
-const Gallery = lazy(() =>
-  import("@/components/portfolio/Gallery").then((m) => ({ default: m.Gallery })),
-);
-const Testimonials = lazy(() =>
-  import("@/components/portfolio/Testimonials").then((m) => ({ default: m.Testimonials })),
-);
+const Projects = lazy(() => import("@/components/portfolio/Projects"));
+const Gallery = lazy(() => import("@/components/portfolio/Gallery"));
+const Testimonials = lazy(() => import("@/components/portfolio/Testimonials"));
 
 const DESC =
   "Ibrahim Khalil — Student, Marketing Officer & Youth Leader from Trishal, Mymensingh. Currently pursuing Honours in Philosophy and Fazil in Bengali, serving as President of Bangladesh Jamaat-e-Islami Youth Wing.";

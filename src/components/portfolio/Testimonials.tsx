@@ -7,7 +7,7 @@ import { useTranslation } from "../../lib/i18n";
 
 const CARD_EASE = [0.16, 1, 0.3, 1] as const;
 
-export function Testimonials() {
+export default function Testimonials() {
   const prefersReduced = useReducedMotion();
   const [rotateKey, setRotateKey] = useState(0);
   const { t, tObject } = useTranslation();

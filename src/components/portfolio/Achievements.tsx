@@ -34,7 +34,7 @@ export function Achievements() {
 
       <div key={revealKey} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {items.map((it, i) => {
-          const Icon = icons[i];
+          const Icon = i < icons.length ? icons[i] : Trophy;
           return (
             <InteractiveCard
               key={it.title}

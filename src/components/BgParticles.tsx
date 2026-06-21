@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useIsLowEndDevice } from "../hooks/useIsLowEndDevice";
 
 interface Bubble {
@@ -10,40 +10,39 @@ interface Bubble {
   xDrift: number;
 }
 
+function generateBubbles(count: number, sizeMin: number, sizeMax: number, durMin: number, durMax: number, delayMax: number, driftMin: number, driftMax: number): Bubble[] {
+  const r: Bubble[] = [];
+  for (let i = 0; i < count; i++) {
+    r.push({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: sizeMin + Math.random() * (sizeMax - sizeMin),
+      duration: durMin + Math.random() * (durMax - durMin),
+      delay: Math.random() * delayMax,
+      xDrift: driftMin + Math.random() * (driftMax - driftMin),
+    });
+  }
+  return r;
+}
+
 export function BgParticles() {
   const isLowEnd = useIsLowEndDevice();
+  const [mounted, setMounted] = useState(false);
 
-  const b1 = useMemo(() => {
-    const r: Bubble[] = [];
-    for (let i = 0; i < 8; i++) {
-      r.push({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: 40 + Math.random() * 80,
-        duration: 25 + Math.random() * 30,
-        delay: Math.random() * 20,
-        xDrift: -30 + Math.random() * 60,
-      });
-    }
-    return r;
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
-  const b2 = useMemo(() => {
-    const r: Bubble[] = [];
-    for (let i = 0; i < 12; i++) {
-      r.push({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: 8 + Math.random() * 20,
-        duration: 20 + Math.random() * 25,
-        delay: Math.random() * 15,
-        xDrift: -20 + Math.random() * 40,
-      });
-    }
-    return r;
+  const [b1, setB1] = useState<Bubble[] | null>(null);
+  const [b2, setB2] = useState<Bubble[] | null>(null);
+
+  useEffect(() => {
+    setB1(generateBubbles(8, 40, 120, 25, 55, 20, -30, 30));
+    setB2(generateBubbles(12, 8, 28, 20, 45, 15, -20, 20));
   }, []);
 
-  if (isLowEnd) return <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true" />;
+  if (!mounted || isLowEnd) return <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true" />;
+  if (!b1 || !b2) return <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true" />;
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">

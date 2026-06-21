@@ -7,10 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import heroPortrait from "../assets/hero-portrait.png";
 import { LanguageProvider, useLanguage } from "../lib/i18n";
 import { useTranslation } from "../lib/i18n";
 import { ThemeProvider } from "../lib/theme";
@@ -112,13 +113,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5428dbe4-5b36-4d62-9e11-7799bf51af3d/id-preview-c544ebdf--8f1700e6-15af-4e9e-95b3-1315107004cf.lovable.app-1781845920193.png",
+        content: heroPortrait,
       },
       {
         name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5428dbe4-5b36-4d62-9e11-7799bf51af3d/id-preview-c544ebdf--8f1700e6-15af-4e9e-95b3-1315107004cf.lovable.app-1781845920193.png",
+        content: heroPortrait,
       },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
@@ -172,11 +171,6 @@ function LoadingGate({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <LanguageProvider>
@@ -185,7 +179,9 @@ function RootComponent() {
         <InteractionProvider>
           <CommandCenterProvider>
             <LoadingGate>
-              {mounted ? <Outlet /> : <PageLoader />}
+              <PageLoader />
+              <Outlet />
+              <RocketTrail />
             </LoadingGate>
           </CommandCenterProvider>
         </InteractionProvider>
