@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -144,11 +144,8 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
-        <script dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark"}document.documentElement.dataset.theme=t==="light"?"light":"";var low=!1;if(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<4)low=!0;if(navigator.deviceMemory&&navigator.deviceMemory<4)low=!0;if(window.innerWidth<480)low=!0;if(low)document.documentElement.dataset.lowEnd="true"}catch(e){}}())`,
-        }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <a
           href="#main-content"
           className="fixed -top-full left-4 z-[10001] rounded-b-lg bg-gold px-4 py-2 text-sm font-medium text-background transition-all focus:top-0 outline-none"
@@ -175,6 +172,11 @@ function LoadingGate({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <LanguageProvider>
@@ -183,9 +185,7 @@ function RootComponent() {
         <InteractionProvider>
           <CommandCenterProvider>
             <LoadingGate>
-              <PageLoader />
-              <Outlet />
-              <RocketTrail />
+              {mounted ? <Outlet /> : <PageLoader />}
             </LoadingGate>
           </CommandCenterProvider>
         </InteractionProvider>

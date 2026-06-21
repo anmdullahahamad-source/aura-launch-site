@@ -13,8 +13,6 @@ interface Bubble {
 export function BgParticles() {
   const isLowEnd = useIsLowEndDevice();
 
-  if (isLowEnd) return <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true" />;
-
   const b1 = useMemo(() => {
     const r: Bubble[] = [];
     for (let i = 0; i < 8; i++) {
@@ -44,6 +42,8 @@ export function BgParticles() {
     }
     return r;
   }, []);
+
+  if (isLowEnd) return <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true" />;
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
@@ -80,8 +80,7 @@ export function BgParticles() {
             top: `${b.top}%`,
             width: b.size,
             height: b.size,
-            background:
-              "radial-gradient(circle, oklch(0.78 0.14 85 / 0.06), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.78 0.14 85 / 0.06), transparent 70%)",
             animation: `bgp-float ${b.duration}s ease-in-out infinite`,
             animationDelay: `${b.delay}s`,
             ["--bdx" as string]: `${b.xDrift}px`,
@@ -97,8 +96,7 @@ export function BgParticles() {
             top: `${b.top}%`,
             width: b.size,
             height: b.size,
-            background:
-              "radial-gradient(circle, oklch(0.78 0.14 85 / 0.08), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.78 0.14 85 / 0.08), transparent 70%)",
             animation: `bgp-float ${b.duration}s ease-in-out infinite`,
             animationDelay: `${b.delay}s`,
             ["--bdx" as string]: `${b.xDrift}px`,

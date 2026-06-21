@@ -95,7 +95,10 @@ const COMMANDS: Command[] = [
   },
 ];
 
-const MODIFIER = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? "\u2318" : "Ctrl";
+function getModifier() {
+  if (typeof navigator === "undefined") return "Ctrl";
+  return /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? "\u2318" : "Ctrl";
+}
 
 const listContainer = {
   hidden: {},
@@ -345,7 +348,7 @@ export function CommandCenterProvider({ children }: { children: ReactNode }) {
                     className="w-full rounded-xl bg-accent/10 border border-border/50 px-9 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/10 transition-all"
                   />
                   <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-0.5 rounded-md border border-border/50 bg-background/50 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground/60">
-                    {MODIFIER}K
+                    {getModifier()}K
                   </kbd>
                 </div>
               </div>
