@@ -16,24 +16,22 @@ function detect(): boolean {
   ) {
     lowEnd = true;
   }
-  if (lowEnd) {
-    document.documentElement.dataset.lowEnd = "true";
-  }
   return lowEnd;
 }
 
 export function useIsLowEndDevice(): boolean {
-  const [isLowEnd, setIsLowEnd] = useState(() => {
-    if (cached !== null) return cached;
-    if (typeof window === "undefined") return false;
-    cached = detect();
-    return cached;
-  });
+  const [isLowEnd, setIsLowEnd] = useState(false);
 
   useEffect(() => {
-    if (cached !== null) return;
+    if (cached !== null) {
+      if (cached !== isLowEnd) setIsLowEnd(cached);
+      return;
+    }
     cached = detect();
     setIsLowEnd(cached);
+    if (cached) {
+      document.documentElement.dataset.lowEnd = "true";
+    }
   }, []);
 
   return isLowEnd;
