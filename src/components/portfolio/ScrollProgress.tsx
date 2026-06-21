@@ -4,6 +4,7 @@ import { ArrowUp, ChevronDown } from "lucide-react";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useTranslation } from "../../lib/i18n";
+import { throttle } from "../../hooks/useThrottle";
 
 const NAV_SECTION_IDS = [
   "about",
@@ -61,7 +62,11 @@ export function ScrollProgress() {
   const prefersReduced = useReducedMotion();
   const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: isMobile ? 0.005 : 0.001,
+  });
   const [showFab, setShowFab] = useState(false);
   const [showIndicator, setShowIndicator] = useState(true);
 
@@ -74,8 +79,9 @@ export function ScrollProgress() {
       setShowFab(window.scrollY > 600);
       setShowIndicator(window.scrollY < 200);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const throttled = throttle(onScroll, 100);
+    window.addEventListener("scroll", throttled, { passive: true });
+    return () => window.removeEventListener("scroll", throttled);
   }, []);
 
   const activeName = activeSection

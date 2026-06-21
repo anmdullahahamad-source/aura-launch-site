@@ -12,6 +12,7 @@ import {
 } from "../HeroMicroInteractions";
 import { SmoothReveal } from "../SmoothReveal";
 import { useTranslation, useLanguage } from "../../lib/i18n";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 function RotatingRole() {
   const { tArray } = useTranslation();
@@ -20,6 +21,7 @@ function RotatingRole() {
   const [text, setText] = useState("");
   const [deleting, setDeleting] = useState(false);
   const prefersReduced = useReducedMotion();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (prefersReduced || !roles?.length) {
@@ -27,10 +29,11 @@ function RotatingRole() {
       return;
     }
     const current = roles[i];
-    const speed = deleting ? 50 : 100;
+    const speed = deleting ? (isMobile ? 80 : 50) : (isMobile ? 180 : 100);
+    const pause = isMobile ? 5000 : 3500;
     const t = setTimeout(() => {
       if (!deleting && text === current) {
-        setTimeout(() => setDeleting(true), 3500);
+        setTimeout(() => setDeleting(true), pause);
         return;
       }
       if (deleting && text === "") {
@@ -41,7 +44,7 @@ function RotatingRole() {
       setText(deleting ? current.slice(0, text.length - 1) : current.slice(0, text.length + 1));
     }, speed);
     return () => clearTimeout(t);
-  }, [text, deleting, i, roles, prefersReduced]);
+  }, [text, deleting, i, roles, prefersReduced, isMobile]);
 
   if (prefersReduced) {
     return <span className="text-gradient-gold">{roles?.[0] ?? ""}</span>;

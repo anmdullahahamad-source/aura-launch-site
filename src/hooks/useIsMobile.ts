@@ -1,14 +1,38 @@
 import { useEffect, useState } from "react";
 
-export function useIsMobile(breakpoint = 768): boolean {
-  const [isMobile, setIsMobile] = useState(false);
+const breakpoint = 768;
+let sharedState = false;
+const subscribers = new Set<(v: boolean) => void>();
+let initialized = false;
+
+function init() {
+  if (initialized || typeof window === "undefined") return;
+  initialized = true;
+  const check = () => {
+    const next = window.innerWidth < breakpoint;
+    if (next !== sharedState) {
+      sharedState = next;
+      subscribers.forEach((fn) => fn(next));
+    }
+  };
+  check();
+  let timer: ReturnType<typeof setTimeout>;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(check, 100);
+  }, { passive: true });
+}
+
+export function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(sharedState);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < breakpoint);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, [breakpoint]);
+    init();
+    subscribers.add(setIsMobile);
+    return () => {
+      subscribers.delete(setIsMobile);
+    };
+  }, []);
 
   return isMobile;
 }
