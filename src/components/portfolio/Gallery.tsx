@@ -3,14 +3,17 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Section, SectionHeader } from "./Section";
 import img0 from "@/assets/img-0.jpg";
 import img1 from "@/assets/img-1.jpg";
-import img2 from "@/assets/img-2.jpg";
+import img2 from "@/assets/img-2.png";
 import img3 from "@/assets/img-3.jpg";
-import img4 from "@/assets/img-4.png";
+import img4 from "@/assets/img-4.jpg";
+import img5 from "@/assets/img-5.jpg";
+import img6 from "@/assets/img-6.jpg";
+import img7 from "@/assets/img-7.jpg";
+import img8 from "@/assets/img-8.jpg";
 import { GalleryInteraction } from "../GalleryInteraction";
 import { useTranslation } from "../../lib/i18n";
 
-const imageSources = [img0, img1, img2, img3, img4];
-const imageHeights = ["h-56 sm:h-72", "h-44 sm:h-56", "h-48 sm:h-64", "h-60 sm:h-80", "h-44 sm:h-56"];
+const imageSources = [img0, img1, img2, img3, img4, img5, img6, img7, img8];
 
 export function Gallery() {
   const prefersReduced = useReducedMotion();
@@ -44,7 +47,7 @@ export function Gallery() {
             transition={{ duration: 0.7, delay: (i % 4) * 0.08, ease: [0.16, 1, 0.3, 1] }}
             className="relative rounded-2xl overflow-hidden glass group cursor-pointer"
           >
-            <div className={`${imageHeights[i]} relative`}>
+            <div className="aspect-[4/3] relative">
               <img
                 src={imageSources[i]}
                 alt={label}

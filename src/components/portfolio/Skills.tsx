@@ -1,12 +1,36 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useMotionValue, useTransform, animate, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Section, SectionHeader } from "./Section";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import { SmoothReveal } from "../SmoothReveal";
 import { useTranslation } from "../../lib/i18n";
 
+function AnimatedPercentage({ to, delay }: { to: number; delay: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const mv = useMotionValue(0);
+  const rounded = useTransform(mv, (v) => Math.round(v));
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (inView) {
+      if (prefersReduced) {
+        mv.set(to);
+        return;
+      }
+      const controls = animate(mv, to, { duration: 1.6, delay, ease: [0.16, 1, 0.3, 1] });
+      return controls.stop;
+    }
+  }, [inView, to, delay, prefersReduced]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      <motion.span>{rounded}</motion.span>
+    </span>
+  );
+}
+
 export function Skills() {
   const prefersReduced = useReducedMotion();
-  const isMobile = useIsMobile();
   const { t, tObject } = useTranslation();
 
   const skills = tObject<{ name: string; value: number }[]>("skills.list");
@@ -29,47 +53,85 @@ export function Skills() {
         description={t("skills.description")}
       />
 
-      <SmoothReveal direction="up" className="max-w-4xl mx-auto">
-        <div className="rounded-3xl glass p-8 sm:p-10">
-          <div className="grid md:grid-cols-2 gap-x-8 gap-y-5">
-            {skills.map((s, i) => (
-              <motion.div
-                key={s.name}
-                initial={prefersReduced ? undefined : { opacity: 0, y: 12 }}
-                whileInView={prefersReduced ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.04,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="group cursor-default"
-              >
-                <div className="flex justify-between items-center mb-2.5">
-                  <span className="text-sm font-medium text-foreground/90 group-hover:text-gold transition-colors duration-300">
+      <SmoothReveal direction="up" className="max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+          {skills.map((s, i) => (
+            <motion.div
+              key={s.name}
+              initial={prefersReduced ? undefined : { opacity: 0, y: 20, scale: 0.95 }}
+              whileInView={prefersReduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.6,
+                delay: i * 0.06,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              whileHover={prefersReduced ? undefined : { y: -4, scale: 1.02 }}
+              className="group relative rounded-2xl glass p-5 sm:p-6 border border-transparent hover:border-gold/25 transition-all duration-500"
+            >
+              <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent group-hover:via-gold/40 transition-all duration-700" />
+
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-3">
+                  <span className="hidden sm:inline-flex text-[10px] font-display font-semibold text-gold/40 tabular-nums">
+                    {(i + 1).toString().padStart(2, "0")}
+                  </span>
+                  <span className="text-sm sm:text-base font-medium text-foreground/90 group-hover:text-gold transition-colors duration-300">
                     {s.name}
                   </span>
-                  <span className="text-xs font-display text-gold tabular-nums">
-                    {s.value}%
-                  </span>
                 </div>
-                <div className="h-2.5 rounded-full bg-muted/30 overflow-hidden transition-shadow duration-300 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.2)]">
+                <span className="text-lg sm:text-xl font-display font-bold text-gold tabular-nums">
+                  <AnimatedPercentage to={s.value} delay={0.4 + i * 0.06} />
+                  <span className="text-xs sm:text-sm font-medium text-gold/60">%</span>
+                </span>
+              </div>
+
+              <div className="relative mt-3 h-3 sm:h-3.5 rounded-full bg-muted/15 overflow-hidden ring-1 ring-white/5 group-hover:ring-gold/20 transition-all duration-500">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${s.value}%` }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 1.4,
+                    delay: 0.2 + i * 0.06,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="relative h-full rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, var(--emerald-glow), var(--gold), var(--emerald-glow))",
+                    backgroundSize: "200% 100%",
+                  }}
+                >
                   <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${s.value}%` }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 1.2,
-                      delay: 0.3 + i * 0.05,
-                      ease: [0.16, 1, 0.3, 1],
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
+                      backgroundSize: "200% 100%",
                     }}
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-glow via-gold to-emerald-glow"
-                    style={{ backgroundSize: "200% 100%" }}
+                    animate={
+                      prefersReduced
+                        ? undefined
+                        : { backgroundPosition: ["200% 0%", "-200% 0%"] }
+                    }
+                    transition={{
+                      duration: 3,
+                      delay: 1.8 + i * 0.06,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  <motion.div
+                    className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full"
+                    style={{
+                      background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
+                      opacity: 0.4,
+                      filter: "blur(8px)",
+                    }}
+                  />
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </SmoothReveal>
     </Section>
