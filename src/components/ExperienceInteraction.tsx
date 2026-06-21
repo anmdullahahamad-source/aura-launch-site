@@ -3,11 +3,13 @@ import { Briefcase } from "lucide-react";
 import { useState, useCallback, useRef } from "react";
 import { useSectionInteraction } from "../interactions";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useIsLowEndDevice } from "../hooks/useIsLowEndDevice";
 import { useTranslation } from "../lib/i18n";
 
 export function ExperienceInteraction({ onActivate }: { onActivate?: () => void }) {
   const prefersReduced = useReducedMotion();
   const isMobile = useIsMobile();
+  const isLowEnd = useIsLowEndDevice();
   const [touched, setTouched] = useState(false);
   const touchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { t } = useTranslation();
@@ -41,7 +43,7 @@ export function ExperienceInteraction({ onActivate }: { onActivate?: () => void 
           onClick={handleClick}
           onKeyDown={handleKeyDown}
           animate={
-            prefersReduced || isMobile
+            prefersReduced || isMobile || isLowEnd
               ? undefined
               : {
                   y: [0, -6, 0],
@@ -49,7 +51,7 @@ export function ExperienceInteraction({ onActivate }: { onActivate?: () => void 
                 }
           }
           transition={
-            prefersReduced || isMobile
+            prefersReduced || isMobile || isLowEnd
               ? undefined
               : {
                   y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
@@ -62,7 +64,7 @@ export function ExperienceInteraction({ onActivate }: { onActivate?: () => void 
           <motion.div
             className="absolute inset-0 rounded-full blur-xl"
             animate={
-              prefersReduced || isMobile
+              prefersReduced || isMobile || isLowEnd
                 ? undefined
                 : {
                     background: [
@@ -73,7 +75,7 @@ export function ExperienceInteraction({ onActivate }: { onActivate?: () => void 
                   }
             }
             transition={
-              prefersReduced || isMobile
+              prefersReduced || isMobile || isLowEnd
                 ? undefined
                 : { duration: 3.5, repeat: Infinity, ease: "easeInOut" }
             }
@@ -133,9 +135,9 @@ export function ExperienceInteraction({ onActivate }: { onActivate?: () => void 
                 }}
               >
                 <motion.span
-                  animate={prefersReduced || isMobile ? undefined : { opacity: [1, 0.5, 1] }}
+                  animate={prefersReduced || isMobile || isLowEnd ? undefined : { opacity: [1, 0.5, 1] }}
                   transition={
-                    prefersReduced || isMobile
+                    prefersReduced || isMobile || isLowEnd
                       ? undefined
                       : { duration: 2, repeat: Infinity, ease: "easeInOut" }
                   }

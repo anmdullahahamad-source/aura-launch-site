@@ -387,7 +387,7 @@
 
 /* Low-end device overrides */
 [data-low-end="true"] {
-  --blur-intensity: 6px;
+  --blur-intensity: 4px;
 }
 
 [data-low-end="true"] .glass,
@@ -397,8 +397,8 @@
 
 [data-low-end="true"] .aurora {
   animation: none;
-  filter: blur(20px);
-  opacity: 0.4;
+  filter: blur(10px);
+  opacity: 0.25;
 }
 
 [data-low-end="true"] .text-gradient-glow {
@@ -411,7 +411,7 @@
 }
 
 [data-low-end="true"] .grid-bg {
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 [data-low-end="true"] .shimmer-text {
@@ -422,4 +422,28 @@
 [data-low-end="true"] [class*="animate-pulse"] {
   animation-duration: 0s !important;
   animation: none !important;
+}
+
+[data-low-end="true"] .glow-text {
+  text-shadow: none !important;
+}
+
+[data-low-end="true"] .glow-gold {
+  box-shadow: none !important;
+}
+
+[data-low-end="true"] .breathe-gold {
+  animation: none !important;
+}
+
+[data-low-end="true"] .text-gradient-glow {
+  -webkit-text-stroke: 0.5px oklch(0.78 0.14 85 / 0.3);
+}
+
+[data-low-end="true"] [class*="blur-"] {
+  --blur-size: 8px;
+}
+
+[data-low-end="true"] body {
+  background-image: none;
 }

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { Section, SectionHeader } from "./Section";
 import { SmoothReveal } from "../SmoothReveal";
 import { useTranslation } from "../../lib/i18n";
+import { useIsLowEndDevice } from "../../hooks/useIsLowEndDevice";
 
 function AnimatedPercentage({ to, delay }: { to: number; delay: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -17,7 +18,11 @@ function AnimatedPercentage({ to, delay }: { to: number; delay: number }) {
         mv.set(to);
         return;
       }
-      const controls = animate(mv, to, { duration: 1.6, delay, ease: [0.16, 1, 0.3, 1] });
+      const controls = animate(mv, to, {
+        duration: prefersReduced ? 0 : 1.6,
+        delay,
+        ease: [0.16, 1, 0.3, 1],
+      });
       return controls.stop;
     }
   }, [inView, to, delay, prefersReduced]);
@@ -31,6 +36,7 @@ function AnimatedPercentage({ to, delay }: { to: number; delay: number }) {
 
 export function Skills() {
   const prefersReduced = useReducedMotion();
+  const isLowEnd = useIsLowEndDevice();
   const { t, tObject } = useTranslation();
 
   const skills = tObject<{ name: string; value: number }[]>("skills.list");
@@ -58,15 +64,15 @@ export function Skills() {
           {skills.map((s, i) => (
             <motion.div
               key={s.name}
-              initial={prefersReduced ? undefined : { opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={prefersReduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              initial={prefersReduced || isLowEnd ? undefined : { opacity: 0, y: 20, scale: 0.95 }}
+              whileInView={prefersReduced || isLowEnd ? undefined : { opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{
                 duration: 0.6,
                 delay: i * 0.06,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              whileHover={prefersReduced ? undefined : { y: -4, scale: 1.02 }}
+              whileHover={prefersReduced || isLowEnd ? undefined : { y: -4, scale: 1.02 }}
               className="group relative rounded-2xl glass p-5 sm:p-6 border border-transparent hover:border-gold/25 transition-all duration-500"
             >
               <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent group-hover:via-gold/40 transition-all duration-700" />
@@ -109,16 +115,20 @@ export function Skills() {
                       backgroundSize: "200% 100%",
                     }}
                     animate={
-                      prefersReduced
+                      prefersReduced || isLowEnd
                         ? undefined
                         : { backgroundPosition: ["200% 0%", "-200% 0%"] }
                     }
-                    transition={{
-                      duration: 3,
-                      delay: 1.8 + i * 0.06,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
+                    transition={
+                      prefersReduced || isLowEnd
+                        ? undefined
+                        : {
+                            duration: 3,
+                            delay: 1.8 + i * 0.06,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }
+                    }
                   />
                   <motion.div
                     className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full"

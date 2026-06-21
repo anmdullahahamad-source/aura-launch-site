@@ -7,14 +7,14 @@ function detect(): boolean {
   const cores = navigator.hardwareConcurrency;
   if (cores && cores < 4) lowEnd = true;
   const mem = (navigator as unknown as { deviceMemory?: number }).deviceMemory;
-  if (mem && mem < 4) lowEnd = true;
-  if (window.innerWidth < 480) lowEnd = true;
+  if (mem && mem < 2) lowEnd = true;
+  if (window.innerWidth < 420) lowEnd = true;
   if (
     "connection" in navigator &&
     (navigator as unknown as { connection?: { effectiveType?: string } }).connection
-      ?.effectiveType === "2g"
   ) {
-    lowEnd = true;
+    const et = (navigator as unknown as { connection?: { effectiveType?: string } }).connection?.effectiveType;
+    if (et === "2g" || et === "3g" || et === "slow-2g") lowEnd = true;
   }
   return lowEnd;
 }
