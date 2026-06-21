@@ -340,14 +340,14 @@ const translations = {
         "Whether it's a community concern, a partnership idea, or a media request — I'd love to hear from you.",
       labels: {
         email: "Email",
-        phone: "Phone",
+        offline: "Offline Call Number",
         whatsapp: "WhatsApp",
         office: "Office",
         facebook: "Facebook",
       },
       values: {
         email: "kholilebrahim2005@gmail.com",
-        phone: "+880 1846-827978",
+        offline: "01872946117",
         whatsapp: "01846827978",
         office: "Mathbari Union, Trishal, Mymensingh",
         facebook: "Md. Ibrahim Kholil",
@@ -763,14 +763,14 @@ const translations = {
         "একটি কমিউনিটি উদ্বেগ, একটি অংশীদারিত্বের ধারণা, বা একটি মিডিয়া অনুরোধ — আমি আপনার কাছ থেকে শুনতে চাই।",
       labels: {
         email: "ইমেইল",
-        phone: "ফোন",
+        offline: "অফলাইন কল নম্বর",
         whatsapp: "হোয়াটসঅ্যাপ",
         office: "অফিস",
         facebook: "ফেসবুক",
       },
       values: {
         email: "kholilebrahim2005@gmail.com",
-        phone: "+৮৮০ ১৮৪৬-৮২৭৯৭৮",
+        offline: "০১৮৭২৯৪৬১১৭",
         whatsapp: "০১৮৪৬৮২৭৯৭৮",
         office: "মাঠবাড়ি ইউনিয়ন, ত্রিশাল, ময়মনসিংহ",
         facebook: "মোঃ ইব্রাহীম খলিল",

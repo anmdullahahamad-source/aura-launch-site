@@ -23,7 +23,7 @@ import { useTranslation } from "../../lib/i18n";
 
 const contactKeys = [
   { Icon: Mail, labelKey: "contact.labels.email", valueKey: "contact.values.email", href: "mailto:kholilebrahim2005@gmail.com" },
-  { Icon: Phone, labelKey: "contact.labels.phone", valueKey: "contact.values.phone", href: "tel:+8801846827978" },
+  { Icon: Phone, labelKey: "contact.labels.offline", valueKey: "contact.values.offline", href: "tel:01872946117" },
   { Icon: MessageCircle, labelKey: "contact.labels.whatsapp", valueKey: "contact.values.whatsapp", href: "https://wa.me/8801846827978" },
   { Icon: MapPin, labelKey: "contact.labels.office", valueKey: "contact.values.office", href: "#map" },
   { Icon: Facebook, labelKey: "contact.labels.facebook", valueKey: "contact.values.facebook", href: "https://www.facebook.com/md.ibrahim.kholil.652607" },
