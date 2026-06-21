@@ -233,6 +233,7 @@
   background-clip: text;
   color: transparent;
   animation: gradient-shift 5s ease-in-out infinite;
+  will-change: background-position;
 }
 
 [data-theme="light"] .text-gradient-live {
@@ -315,6 +316,7 @@
     radial-gradient(ellipse 45% 35% at 50% 100%, oklch(0.45 0.14 162 / 0.3), transparent);
   filter: blur(40px);
   animation: aurora-shift 18s ease-in-out infinite;
+  will-change: filter;
   pointer-events: none;
 }
 
@@ -342,6 +344,7 @@
 
 @utility animate-float {
   animation: float-slow 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes shimmer {
@@ -365,6 +368,7 @@
   background-clip: text;
   color: transparent;
   animation: shimmer 4s linear infinite;
+  will-change: background-position;
 }
 
 [data-theme="light"] .shimmer-text {

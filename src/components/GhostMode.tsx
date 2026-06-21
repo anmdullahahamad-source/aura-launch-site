@@ -239,13 +239,20 @@ export function GhostMode({ active, onComplete }: { active: boolean; onComplete:
         expression: "neutral",
         isClone: false,
       };
+      let timer: ReturnType<typeof setTimeout>;
       const handler = () => {
-        const nw = window.innerWidth;
-        isMobileRef.current = nw < 768;
-        setScreenSize({ w: nw, h: window.innerHeight });
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const nw = window.innerWidth;
+          isMobileRef.current = nw < 768;
+          setScreenSize({ w: nw, h: window.innerHeight });
+        }, 100);
       };
       window.addEventListener("resize", handler);
-      return () => window.removeEventListener("resize", handler);
+      return () => {
+        window.removeEventListener("resize", handler);
+        clearTimeout(timer);
+      };
     }
   }, []);
 

@@ -5,6 +5,7 @@ import { useTranslation, useLanguage } from "../../lib/i18n";
 import { useTheme } from "../../lib/theme";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { throttle } from "../../hooks/useThrottle";
 
 const links = [
   { href: "#about", key: "nav.about" },
@@ -31,8 +32,9 @@ export function Nav() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const throttled = throttle(onScroll, 100);
+    window.addEventListener("scroll", throttled, { passive: true });
+    return () => window.removeEventListener("scroll", throttled);
   }, []);
 
   useEffect(() => {

@@ -126,6 +126,7 @@ export default function Projects() {
               <img
                 src={projectMeta[i].image}
                 alt=""
+                loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/50" />

@@ -24,7 +24,7 @@ export function Education() {
         eyebrow={t("education.eyebrow")}
         title={
           <motion.span
-            whileHover={isMobile ? undefined : { scale: 1.03 }}
+            whileHover={isMobile || prefersReduced ? undefined : { scale: 1.03 }}
             className="inline-block transition-all duration-300 hover:[text-shadow:0_0_40px_oklch(0.78_0.14_85_/_0.4)]"
           >
             <span className="text-gradient-live text-5xl sm:text-6xl">{t("education.title1")}</span>{" "}

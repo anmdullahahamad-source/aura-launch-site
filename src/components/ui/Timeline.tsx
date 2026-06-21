@@ -25,13 +25,17 @@ export function Timeline({ children, className = "" }: TimelineProps) {
         aria-hidden="true"
         className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 overflow-hidden"
       >
-        <motion.div
-          className="h-full w-full origin-top"
-          style={{
-            background: "var(--timeline-line)",
-            scaleY: lineScaleY,
-          }}
-        />
+        {prefersReduced || isMobile ? (
+          <div className="h-full w-full" style={{ background: "var(--timeline-line)" }} />
+        ) : (
+          <motion.div
+            className="h-full w-full origin-top"
+            style={{
+              background: "var(--timeline-line)",
+              scaleY: lineScaleY,
+            }}
+          />
+        )}
       </div>
       {children}
     </div>
@@ -64,18 +68,9 @@ export function TimelineItem({
   const prefersReduced = useReducedMotion();
   const isMobile = useIsMobile();
   const isLeft = side === "left";
-  const slideX = isLeft ? 24 : -24;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: slideX }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.12,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+    <div
       className={`relative flex mb-10 last:mb-0 ${className}`}
     >
       <div className={`flex-1 ${isLeft ? "pr-8 sm:pr-12" : "pl-8 sm:pl-12"}`}>
@@ -105,24 +100,30 @@ export function TimelineItem({
       </div>
 
       <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 top-6 z-10">
-        <motion.div
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            type: "spring",
-            stiffness: 200,
-            damping: 12,
-            delay: index * 0.12 + 0.15,
-          }}
-          className="grid h-4 w-4 place-items-center"
-        >
-          <div className="h-3 w-3 rounded-full bg-gradient-to-br from-gold to-emerald-glow" style={{ boxShadow: "var(--timeline-dot-shadow)" }} />
-        </motion.div>
+        {prefersReduced || isMobile ? (
+          <div className="grid h-4 w-4 place-items-center">
+            <div className="h-3 w-3 rounded-full bg-gradient-to-br from-gold to-emerald-glow" style={{ boxShadow: "var(--timeline-dot-shadow)" }} />
+          </div>
+        ) : (
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 12,
+              delay: index * 0.12 + 0.15,
+            }}
+            className="grid h-4 w-4 place-items-center"
+          >
+            <div className="h-3 w-3 rounded-full bg-gradient-to-br from-gold to-emerald-glow" style={{ boxShadow: "var(--timeline-dot-shadow)" }} />
+          </motion.div>
+        )}
       </div>
 
       <div className="flex-1 hidden sm:block" />
-    </motion.div>
+    </div>
   );
 }
 
